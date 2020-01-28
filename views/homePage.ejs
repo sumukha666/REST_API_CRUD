@@ -1,0 +1,211 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+
+        <h1>Welcome home</h1>
+        <button id="getBtn">get products</button>
+        <form id="createForm">
+            NAME:<input type="text" id="nameId" ></input>
+            Price:<input type="text" id="priceId" ></input>
+           <button>Create</button>
+        </form>
+        
+        <table id="table">
+               
+                <tr>
+                    <th>Id</th>
+                    <th>NAME</th>
+                    <th>Price</th>
+                </tr>
+            <div id="createTable"></div>
+        </table>
+
+        
+        
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script>
+            
+            $(function(){
+                //Get elements from the database
+                
+            //$(function(){
+                //Get elements from the database
+                $('#getBtn').on('click',function(){
+                    $.ajax({
+                        url:'/products',
+                        contentType:'appliication/json',
+                        success:function(response){
+                           
+                            console.log(response);
+                            //console.log(response.data[0]);
+                           /*  var tbodyEl =document.getElementById("tableId");
+                             console.log(tbodyEl)
+                            
+                            console.log(response.data.length);
+                            //response.data.forEach(function(data) {
+                            for( i=0;i<response.data.length;i++){
+                                let htmlCarry="";
+                                htmlCarry='<tr><td class="id">'+ response.data[i].Id +'</td><td><input type="text" class="name" value="'+ response.data[i].OrderName +'"></td>\
+                                    <td><input type="text" class="price" value="'+ response.data[i].Price +'"></td> <td> <button class="updateButton">\
+                                        Update</button></td><td><button class="deleteValue">delete</button> </td></tr>';
+                                
+                               // tbodyEl.val('');
+                                console.log(response.data[i]);
+                                tbodyEl.append(htmlCarry)*/
+                            //console.log(response.data[0].Id);
+                            var mainContainer = document.getElementById('createTable');
+                                mainContainer.innerHTML="";
+                                for (var i = 0; i < response.data.length; i++) {
+                                    // if(response.data[i].Id=== undefined){
+                                    //     break;
+                                    // }
+                                    let div = document.createElement("tr");
+                                    div.innerHTML = '<td class="id">'+response.data[i].Id +' </td><td><input type="text" class="name" value=" '+response.data[i].OrderName+' "></td>\
+                                    <td><input type="text" class="price" value="'+response.data[i].Price +'"></td>\
+                                        <td> <button class="updateBtn">Update</button></td><td><button class="deleteBtn">delete</button> </td>';
+                                    //div.innerHTML = 'id:'+result[i].id +' name:'+result[i].name+' price'+result[i].price;
+                                    //console.log(i);
+                                    mainContainer.appendChild(div);
+                                }
+                            }
+                    });
+                });
+                
+                
+                //working part
+                //Post to create new elements
+                $('#createForm').on('submit',function(event){
+                    event.preventDefault();
+                    var nameIpt = $('#nameId');
+                    var priceIpt = $('#priceId');
+
+                    $.ajax({
+                        url:'/products',
+                        method:'POST',
+                        contentType:'application/json',
+                        data : JSON.stringify({name: nameIpt.val(),price: priceIpt.val()}),
+                        success: function(response){
+                            console.log(response);
+                            nameIpt.val('');
+                            priceIpt.val('');
+                            $('#getBtn').click();
+                        }
+                    })
+                })
+
+                $(document).on('click','#createTable tr td button.updateBtn',function(){
+                    var rowEl = $(this).closest('tr');
+                    var id = rowEl.find('.id').text();
+                    var newName =rowEl.find('.name').val();
+                    var newPrice = rowEl.find('.price').val();
+                    //console.log("yessss");
+                    //console.log(id+" "+newName);
+                    $.ajax({
+                        url:'/products/'+id,
+                        method:'PUT',
+                        contentType:'application/json',
+                        data : JSON.stringify({name : newName,price : newPrice}),
+                        success : function(response){
+                            console.log(response);
+                            //namePut.val('');
+                            //pricePut.val('');
+                            $('#getBtn').click();
+                        }
+                    })
+
+                })
+
+                $(document).on('click','#createTable tr td button.deleteBtn',function(){
+                    var rowEl = $(this).closest('tr');
+                    var id = rowEl.find('.id').text();
+
+                    $.ajax({
+                    url:'/products/'+id,
+                    method:'DELETE',
+                    contentType:'application/json',
+                    success : function(response){
+                        console.log(response);
+                        //idDel.val('');
+                        $('#getBtn').click();
+                    }
+                    })
+                    
+                })
+
+
+
+                /*
+                $('#putbtn').on('click',function(event){
+                    event.preventDefault();
+                    var idPut = $('#putId');
+                    var namePut = $('#putName');
+                    var pricePut = $('#putPrice');
+
+                    $.ajax({
+                        url:'/products/'+idPut.val(),
+                        method:'PUT',
+                        contentType:'application/json',
+                        data : JSON.stringify({name : namePut.val(),price : pricePut.val()}),
+                        success : function(response){
+                            console.log(response);
+                            namePut.val('');
+                            pricePut.val('');
+                        }
+                    })
+                })
+
+                $('#delbtn').on('click',function(event){
+                event.preventDefault();
+                var idDel = $('#delId');
+
+                $.ajax({
+                    url:'/products/'+idDel.val(),
+                    method:'DELETE',
+                    contentType:'application/json',
+                    success : function(response){
+                        console.log(response);
+                        idDel.val('');
+                    }
+                })
+            })
+
+        });
+        */
+
+
+
+          /*
+          $(window).on('load',function(){
+                    $.ajax({
+                        url:'/products',
+                        contentType:'appliication/json',
+                        success:function(response){
+                            console.log(response);
+                            console.log(response.data[0]);
+                             var tbodyEl =$('tbody');
+                             tbodyEl.html( ' ');
+                            console.log(response.data.length);
+                            //response.data.forEach(function(data) {
+                            for( i=0;i<response.data.length;i++){
+                                let htmlCarry="";
+                                htmlCarry='<tr><td class="id">'+ response.data[i].Id +'</td><td><input type="text" class="name" value="'+ response.data[i].OrderName +'"></td>\
+                                    <td><input type="text" class="price" value="'+ response.data[i].Price +'"></td> <td> <button class="updateButton">\
+                                        Update</button></td><td><button class="deleteValue">delete</button> </td></tr>';
+                                
+                               // tbodyEl.val('');
+                                console.log(response.data[i]);
+                                tbodyEl.append(htmlCarry).fadeIn('slow');
+                            }
+                        }
+                    });
+                    */
+                });
+
+        
+        
+        
+        </script>
+    </body>
+</html>

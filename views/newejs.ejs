@@ -1,0 +1,27 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>We Used HTML <%= person %> </h1>
+        <h2>now <strong> <%= data[0].toString %></strong> : <strong><%= data[0].order1 %></strong></h2>
+
+        <table>
+            <tr>
+                <td>Id</td>
+                <td>Item</td>
+                <td>Price</td>
+            </tr>
+            <% for(var i=0; i<data.length; i++){ %>
+                <tr>
+                    <td> <%=data[i].id %></td>
+                    <td> <%=data[i].name %></td>
+                    <td> <%=data[i].price %></td>
+                </tr>
+           <% }%>
+
+
+        </table>
+
+    </body>
+</html>

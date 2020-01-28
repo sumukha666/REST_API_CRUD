@@ -1,0 +1,78 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+
+        <h1>Welcome home</h1>
+        <button id="getBtn">get products</button>
+        <form id="createForm">
+            NAME:<input type="text" id="nameId" ></input>
+            Price:<input type="text" id="priceId" ></input>
+           <button>Create</button>
+        </form>
+        
+        
+        <table>
+            <tr>
+                <thead>
+                    <th>Id</th>
+                    <th>NAME</th>
+                    <th>Price</th>
+                </thead>
+                <tbody></tbody>
+            </tr>
+        </table>
+        
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script>
+            $(function(){
+                //Get elements from the database
+                $('#getBtn').on('click',function(){
+                    $.ajax({
+                        url:'/products',
+                        contentType:'appliicationn/json',
+                        success:function(response){
+                            console.log(response);
+                             var tbodyEl =$('tbody');
+                             tbodyEl.html( ' ');
+
+                             response.data.forEach(function(data) {
+                                tbodyEl.append('<tr><td class="id">'+ data.id +'</td><td><input type="text" class="name" value="'+ data.name +'"></td>\
+                                    <td><input type="text" class="price" value="'+ data.price +'"></td> <td> <button class="updateButton">\
+                                        Update</button><button class="deleteValue">delete</button>');
+                            });
+                        }
+                    })
+                });
+
+                //Post to create new elements
+                $('#createForm').on('submit',function(event){
+                    event.preventDefault();
+                    var nameIpt = $('#nameId');
+                    var priceIpt = $('#priceId');
+
+                    $.ajax({
+                        url:'/products',
+                        method:'POST',
+                        contentType:'application/json',
+                        data : JSON.stringify({name: nameIpt.val(),price: priceIpt.val()}),
+                        success: function(response){
+                            console.log(response);
+                            nameIpt.val('');
+                            priceIpt.val('');
+                            $('#getBtn').click();
+                        }
+                    })
+                })
+
+
+
+
+            });
+        
+        
+        
+        </script>
+    </body>
+</html>
